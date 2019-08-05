@@ -2,14 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using NServiceBus;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Client
 {
     internal static class Helper
     {
-        private static IEndpointInstance _instance;
         private static EndpointConfiguration _endpointConfiguration;
 
         internal static EndpointConfiguration ConfigureEndpoint(IConfiguration configuration)
@@ -49,7 +46,6 @@ namespace Client
             routing.RouteToEndpoint(typeof(PayInvoice), "billing");
 
             _endpointConfiguration.EnableInstallers();
-
 
             _endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             _endpointConfiguration.UsePersistence<InMemoryPersistence>();

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -68,7 +66,6 @@ namespace Reservation
             transport.UsePublisherConfirms(true);
             transport.UseDirectRoutingTopology();
             _endpointConfiguration.EnableInstallers();
-
 
             _endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             _endpointConfiguration.UsePersistence<InMemoryPersistence>();
