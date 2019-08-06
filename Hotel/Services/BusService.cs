@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
 using NServiceBus;
+using Messages.Commands;
 
-namespace Reservation
+namespace Hotel
 {
-    public class BillingBusService : IHostedService
+    public class BusService : IHostedService
     {
         private readonly IConfiguration _configuration;
         private readonly ILog _logger;
@@ -16,10 +17,10 @@ namespace Reservation
         private IEndpointInstance _instance;
         private EndpointConfiguration _endpointConfiguration;
 
-        public BillingBusService(IConfiguration configuration)
+        public BusService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _logger = LogManager.GetLogger<BillingBusService>();
+            _logger = LogManager.GetLogger<BusService>();
             Init();
         }
 
@@ -65,7 +66,12 @@ namespace Reservation
             transport.ConnectionString(connectionString);
             transport.UsePublisherConfirms(true);
             transport.UseDirectRoutingTopology();
+
+            var routing = transport.Routing();
+            routing.RouteToEndpoint(typeof(MakeReservation), "reservation");
+
             _endpointConfiguration.EnableInstallers();
+
 
             _endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             _endpointConfiguration.UsePersistence<InMemoryPersistence>();

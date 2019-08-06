@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
 using NServiceBus;
 
-namespace Billing
+namespace Reservation
 {
-    public class BillingBusService : IHostedService
+    public class BusService : IHostedService
     {
         private readonly IConfiguration _configuration;
         private readonly ILog _logger;
@@ -16,10 +16,10 @@ namespace Billing
         private IEndpointInstance _instance;
         private EndpointConfiguration _endpointConfiguration;
 
-        public BillingBusService(IConfiguration configuration)
+        public BusService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _logger = LogManager.GetLogger<BillingBusService>();
+            _logger = LogManager.GetLogger<BusService>();
             Init();
         }
 
@@ -42,8 +42,8 @@ namespace Billing
             var transport = _endpointConfiguration.UseTransport<RabbitMQTransport>();
 
             string connectionString = String.Empty;
-            connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:host"]) 
-                ? "host=localhost;" 
+            connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:host"])
+                ? "host=localhost;"
                 : "host=" + _configuration["NServiceBus:Connection:host"] + ";";
 
             connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:vhost"])

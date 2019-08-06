@@ -28,7 +28,7 @@ namespace Hotel
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<LifetimeEventsHostedService>();
-                    services.AddHostedService<BillingBusService>();
+                    services.AddHostedService<BusService>();
                 })
                 .ConfigureLogging((hostContext, configLogging) =>
                 {

@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
 using NServiceBus;
-using Messages.Commands;
 
-namespace Hotel
+namespace Billing
 {
-    public class BillingBusService : IHostedService
+    public class BusService : IHostedService
     {
         private readonly IConfiguration _configuration;
         private readonly ILog _logger;
@@ -17,10 +16,10 @@ namespace Hotel
         private IEndpointInstance _instance;
         private EndpointConfiguration _endpointConfiguration;
 
-        public BillingBusService(IConfiguration configuration)
+        public BusService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _logger = LogManager.GetLogger<BillingBusService>();
+            _logger = LogManager.GetLogger<BusService>();
             Init();
         }
 
@@ -43,8 +42,8 @@ namespace Hotel
             var transport = _endpointConfiguration.UseTransport<RabbitMQTransport>();
 
             string connectionString = String.Empty;
-            connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:host"])
-                ? "host=localhost;"
+            connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:host"]) 
+                ? "host=localhost;" 
                 : "host=" + _configuration["NServiceBus:Connection:host"] + ";";
 
             connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:vhost"])
@@ -66,12 +65,7 @@ namespace Hotel
             transport.ConnectionString(connectionString);
             transport.UsePublisherConfirms(true);
             transport.UseDirectRoutingTopology();
-
-            var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(MakeReservation), "reservation");
-
             _endpointConfiguration.EnableInstallers();
-
 
             _endpointConfiguration.UseSerialization<NewtonsoftSerializer>();
             _endpointConfiguration.UsePersistence<InMemoryPersistence>();
