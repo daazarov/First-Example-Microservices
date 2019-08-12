@@ -77,11 +77,6 @@ namespace Hotel
             _endpointConfiguration.UsePersistence<InMemoryPersistence>();
             _endpointConfiguration.SendFailedMessagesTo(_configuration["NServiceBus:EndPoint:ErrorQueue"]);
             _endpointConfiguration.AuditProcessedMessagesTo(_configuration["NServiceBus:EndPoint:AuditQueue"]);
-
-            /*_endpointConfiguration.SendHeartbeatTo("Particular.ServiceControl");
-            var metrics = _endpointConfiguration.EnableMetrics();
-            metrics.SendMetricDataToServiceControl("Particular.Monitoring", TimeSpan.FromMilliseconds(500));*/
-
         }
     }
 }

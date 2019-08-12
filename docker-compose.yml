@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  billing:
+    image: ${DOCKER_REGISTRY-}billing
+    build:
+      context: .
+      dockerfile: src/Billing/Dockerfile
+    depends_on:
+     - rabbitmq
+
+  hotel:
+    image: ${DOCKER_REGISTRY-}hotel
+    build:
+      context: .
+      dockerfile: src/Hotel/Dockerfile
+    depends_on:
+     - rabbitmq
+     - reservation
+
+
+  reservation:
+    image: ${DOCKER_REGISTRY-}reservation
+    build:
+      context: .
+      dockerfile: src/Reservation/Dockerfile
+    depends_on:
+     - rabbitmq
+
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit1"
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using NServiceBus.Logging;
 using NServiceBus;
 
-namespace Reservation
+namespace Billing
 {
     public class BusService : IHostedService
     {
@@ -42,8 +42,8 @@ namespace Reservation
             var transport = _endpointConfiguration.UseTransport<RabbitMQTransport>();
 
             string connectionString = String.Empty;
-            connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:host"])
-                ? "host=localhost;"
+            connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:host"]) 
+                ? "host=localhost;" 
                 : "host=" + _configuration["NServiceBus:Connection:host"] + ";";
 
             connectionString += String.IsNullOrEmpty(_configuration["NServiceBus:Connection:vhost"])
@@ -71,11 +71,6 @@ namespace Reservation
             _endpointConfiguration.UsePersistence<InMemoryPersistence>();
             _endpointConfiguration.SendFailedMessagesTo(_configuration["NServiceBus:EndPoint:ErrorQueue"]);
             _endpointConfiguration.AuditProcessedMessagesTo(_configuration["NServiceBus:EndPoint:AuditQueue"]);
-
-            /*_endpointConfiguration.SendHeartbeatTo("Particular.ServiceControl");
-            var metrics = _endpointConfiguration.EnableMetrics();
-            metrics.SendMetricDataToServiceControl("Particular.Monitoring", TimeSpan.FromMilliseconds(500));*/
-
         }
     }
 }
