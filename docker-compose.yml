@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: src/Billing/Dockerfile
+    environment:
+     - NServiceBus__Connection__host=rabbitmq
     depends_on:
      - rabbitmq
 
@@ -26,6 +28,7 @@ services:
       dockerfile: src/Reservation/Dockerfile
     depends_on:
      - rabbitmq
+    
 
 
   rabbitmq:
