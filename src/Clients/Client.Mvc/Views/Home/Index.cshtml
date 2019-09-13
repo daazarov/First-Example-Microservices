@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="uk-margin-xlarge-top uk-card uk-card-default uk-card-body">
+    <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" onclick="AddBooking()">Booking</button>
+    <button class="uk-button uk-button-secondary uk-width-1-1" onclick="PayReservation()">Pay</button>
+</div>
+
+
+@section Scripts {
+
+    <script src="~/lib/uikit/js/uikit.js" asp-append-version="true"></script>
+    <script src="~/lib/uikit/js/uikit-icons.js" asp-append-version="true"></script>
+    <script src="~/js/signalr.min.js" asp-append-version="true"></script>
+    <script>
+        function AddBooking() {
+            $.ajax({
+                url: "Home/Booking",
+                contentType: "text/html",
+                method: "Get",
+                success: function (data) {
+                }
+            });
+        }
+
+        function PayReservation() {
+            $.ajax({
+                url: "Home/Pay",
+                contentType: "text/html",
+                method: "Get",
+                success: function (data) {
+                }
+            });
+        }
+    </script>
+    <script>
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl("/Hub/Notification").build();
+
+        connection.on("primary", function (message) {
+            UIkit.notification({ message: "<span uk-icon=\'icon: info\'></span>&#8195" + message, status: 'primary', timeout: 10000 })
+        });
+
+        connection.on("warning", function (message) {
+            UIkit.notification({ message: "<span uk-icon=\'icon: warning\'></span>&#8195" + message, status: 'warning', timeout: 10000 })
+        });
+
+        connection.on("success", function (message) {
+            UIkit.notification({ message: "<span uk-icon=\'icon: check\'></span>&#8195" + message, status: 'success', timeout: 10000 });
+        });
+
+        connection.on("danger", function (message) {
+            UIkit.notification({ message: "<span uk-icon=\'icon: ban\'></span>&#8195" + message, status: 'danger', timeout: 10000 })
+        });
+
+        connection.start();
+    </script>
+}
+

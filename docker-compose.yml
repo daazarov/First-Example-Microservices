@@ -3,9 +3,10 @@ version: '3.4'
 services:
   billing:
     image: ${DOCKER_REGISTRY-}billing
+    container_name: billing
     build:
       context: .
-      dockerfile: src/Billing/Dockerfile
+      dockerfile: src/Services/Billing/Dockerfile
     environment:
      - NServiceBus__Connection__host=rabbitmq
     depends_on:
@@ -13,9 +14,10 @@ services:
 
   hotel:
     image: ${DOCKER_REGISTRY-}hotel
+    container_name: hotel
     build:
       context: .
-      dockerfile: src/Hotel/Dockerfile
+      dockerfile: src/Services/Hotel/Dockerfile
     depends_on:
      - rabbitmq
      - reservation
@@ -23,12 +25,22 @@ services:
 
   reservation:
     image: ${DOCKER_REGISTRY-}reservation
+    container_name: reservation
     build:
       context: .
-      dockerfile: src/Reservation/Dockerfile
+      dockerfile: src/Services/Reservation/Dockerfile
     depends_on:
      - rabbitmq
-    
+
+
+  webclient:
+    image: ${DOCKER_REGISTRY-}webclient
+    container_name: webclient
+    build:
+      context: .
+      dockerfile: src/Clients/Client.Mvc/Dockerfile
+    depends_on:
+     - rabbitmq
 
 
   rabbitmq:
